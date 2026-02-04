@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Viewer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Custom scrollbar for a cleaner look */
+        .prose img { border-radius: 0.5rem; }
+        pre { background: #1f2937; color: white; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+        <div class="p-6 border-b border-gray-200">
+            <h1 class="text-xl font-bold text-indigo-600">MD Docs</h1>
+        </div>
+        <nav id="file-list" class="flex-1 overflow-y-auto p-4 space-y-2">
+            </nav>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto bg-white p-8 md:p-16">
+        <article id="content" class="max-w-3xl mx-auto prose prose-indigo lg:prose-xl">
+            <p class="text-gray-400">Select a file from the sidebar to begin.</p>
+        </article>
+    </main>
+
+    <script>
+
+// Add your .md filenames here
+const files = [
+    'README.md',
+    'setup-guide.md',
+    'notes.md'
+];
+
+const fileListContainer = document.getElementById('file-list');
+const contentContainer = document.getElementById('content');
+
+// Generate the sidebar links
+files.forEach(file => {
+    const button = document.createElement('button');
+    button.textContent = file.replace('.md', '');
+    button.className = "w-full text-left px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors capitalize";
+    
+    button.onclick = () => loadMarkdown(file);
+    fileListContainer.appendChild(button);
+});
+
+async function loadMarkdown(filename) {
+    try {
+        contentContainer.innerHTML = '<p class="animate-pulse text-gray-400">Loading...</p>';
+        
+        const response = await fetch(filename);
+        if (!response.ok) throw new Error('File not found');
+        
+        const mdText = await response.text();
+        
+        // Convert Markdown to HTML using Marked.js
+        contentContainer.innerHTML = marked.parse(mdText);
+    } catch (err) {
+        contentContainer.innerHTML = `<p class="text-red-500">Error: ${err.message}</p>`;
+    }
+}</script>
+</body>
+</html>
