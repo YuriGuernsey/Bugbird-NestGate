@@ -6,6 +6,8 @@ NestGate gives you full ownership of your access infrastructure without propriet
 
 This project is designed for real buildings, not demos.
 
+### Door Scanner 3D Model
+
 ![3D Model Of Door Scanner](/scanner_model.png "Door Scanner")
 
 ---
