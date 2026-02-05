@@ -1,73 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown Viewer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        /* Custom scrollbar for a cleaner look */
-        .prose img { border-radius: 0.5rem; }
-        pre { background: #1f2937; color: white; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markdown Viewer</title>
+
+  <!-- Tailwind + Typography plugin -->
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+
+  <!-- Marked (Markdown -> HTML) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Sanitize HTML output (important) -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+
+  <!-- Code highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+
+  <style>
+    /* Make long docs feel nicer */
+    .prose img { border-radius: 0.75rem; }
+    .prose code { font-size: 0.95em; }
+    .prose pre { border-radius: 0.75rem; overflow-x: auto; }
+    .prose table { width: 100%; display: block; overflow-x: auto; }
+    .prose a { text-decoration: none; }
+    .prose a:hover { text-decoration: underline; }
+
+    /* Optional: nicer scrollbars */
+    *::-webkit-scrollbar { width: 10px; height: 10px; }
+    *::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.35); border-radius: 999px; }
+    *::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,0.55); }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900 flex h-screen overflow-hidden">
 
-    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
-        <div class="p-6 border-b border-gray-200">
-            <h1 class="text-xl font-bold text-indigo-600">MD Docs</h1>
-        </div>
-        <nav id="file-list" class="flex-1 overflow-y-auto p-4 space-y-2">
-            </nav>
-    </aside>
+<body class="bg-slate-50 text-slate-900 flex h-screen overflow-hidden">
+  <aside class="w-72 bg-white border-r border-slate-200 flex flex-col">
+    <div class="p-6 border-b border-slate-200">
+      <div class="flex items-center justify-between gap-3">
+        <h1 class="text-xl font-bold text-indigo-600">MD Docs</h1>
+        <button id="themeBtn"
+          class="text-sm px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50">
+          Theme
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 mt-2">Click a file to load it. URL hash deep-links work.</p>
+    </div>
 
-    <main class="flex-1 overflow-y-auto bg-white p-8 md:p-16">
-        <article id="content" class="max-w-3xl mx-auto prose prose-indigo lg:prose-xl">
-            <p class="text-gray-400">Select a file from the sidebar to begin.</p>
-        </article>
-    </main>
+    <nav id="file-list" class="flex-1 overflow-y-auto p-3 space-y-1"></nav>
 
-    <script>
+    <div class="p-4 border-t border-slate-200 text-xs text-slate-500">
+      Tip: Put this on GitHub Pages and keep your .md files alongside index.html.
+    </div>
+  </aside>
 
-// Add your .md filenames here
-const files = [
-    'README.md',
-    'BOM.md',
-    'CONTRIBUTING.md',
-    'INSTALLATION.md',
-    'SECURITY.md',
-    'SECURITY_MODEL.md'
-    
-];
+  <main class="flex-1 overflow-y-auto bg-white">
+    <div class="px-6 md:px-12 py-10 md:py-16">
+      <article id="content"
+        class="max-w-4xl mx-auto prose prose-slate prose-headings:scroll-mt-24 prose-a:text-indigo-600 lg:prose-lg">
+        <p class="text-slate-400">Select a file from the sidebar to begin.</p>
+      </article>
+    </div>
+  </main>
 
-const fileListContainer = document.getElementById('file-list');
-const contentContainer = document.getElementById('content');
+  <script>
+    // Put your .md filenames here
+    const files = [
+      "README.md",
+      "BOM.md",
+      "CONTRIBUTING.md",
+      "INSTALLATION.md",
+      "SECURITY.md",
+      "SECURITY_MODEL.md"
+    ];
 
-// Generate the sidebar links
-files.forEach(file => {
-    const button = document.createElement('button');
-    button.textContent = file.replace('.md', '');
-    button.className = "w-full text-left px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors capitalize";
-    
-    button.onclick = () => loadMarkdown(file);
-    fileListContainer.appendChild(button);
-});
+    const fileListContainer = document.getElementById("file-list");
+    const contentContainer = document.getElementById("content");
+    const themeBtn = document.getElementById("themeBtn");
 
-async function loadMarkdown(filename) {
-    try {
-        contentContainer.innerHTML = '<p class="animate-pulse text-gray-400">Loading...</p>';
-        
-        const response = await fetch(filename);
-        if (!response.ok) throw new Error('File not found');
-        
-        const mdText = await response.text();
-        
-        // Convert Markdown to HTML using Marked.js
-        contentContainer.innerHTML = marked.parse(mdText);
-    } catch (err) {
-        contentContainer.innerHTML = `<p class="text-red-500">Error: ${err.message}</p>`;
+    // Marked config
+    marked.setOptions({
+      gfm: true,
+      breaks: false,
+      headerIds: true,
+      mangle: false
+    });
+
+    // Render sidebar
+    const buttonsByFile = new Map();
+
+    files.forEach((file) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = file.replace(".md", "");
+      btn.className =
+        "w-full text-left px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 transition-colors capitalize text-sm";
+
+      btn.addEventListener("click", () => {
+        location.hash = encodeURIComponent(file);
+      });
+
+      fileListContainer.appendChild(btn);
+      buttonsByFile.set(file, btn);
+    });
+
+    function setActive(filename) {
+      for (const [file, btn] of buttonsByFile.entries()) {
+        const isActive = file === filename;
+        btn.className =
+          "w-full text-left px-3 py-2 rounded-lg transition-colors capitalize text-sm " +
+          (isActive
+            ? "bg-indigo-50 text-indigo-700 font-semibold"
+            : "hover:bg-indigo-50 hover:text-indigo-700");
+      }
     }
-}</script>
+
+    function absolutizeRelativeUrls(container, filename) {
+      // If you later put docs in folders, this helps images/links resolve relative to the md file.
+      // For same-folder docs, it still works fine.
+      const base = new URL(filename, window.location.href);
+
+      // Fix image src
+      container.querySelectorAll("img").forEach((img) => {
+        const src = img.getAttribute("src");
+        if (!src) return;
+        if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) return;
+        img.src = new URL(src, base).toString();
+      });
+
+      // Fix link href
+      container.querySelectorAll("a").forEach((a) => {
+        const href = a.getAttribute("href");
+        if (!href) return;
+
+        // If link is another markdown file in your list, route it through the viewer
+        const decoded = decodeURIComponent(href);
+        const clean = decoded.split("#")[0];
+        if (files.includes(clean)) {
+          a.addEventListener("click", (e) => {
+            e.preventDefault();
+            location.hash = encodeURIComponent(decoded);
+          });
+          return;
+        }
+
+        // Otherwise, open external links in a new tab
+        if (href.startsWith("http://") || href.startsWith("https://")) {
+          a.target = "_blank";
+          a.rel = "noreferrer noopener";
+        }
+      });
+    }
+
+    async function loadMarkdown(filenameWithOptionalHash) {
+      try {
+        const [filename, anchor] = filenameWithOptionalHash.split("#");
+
+        contentContainer.innerHTML =
+          '<p class="animate-pulse text-slate-400">Loading...</p>';
+
+        const response = await fetch(filename, { cache: "no-cache" });
+        if (!response.ok) throw new Error(`Could not load ${filename}`);
+
+        const mdText = await response.text();
+
+        // Convert to HTML
+        const rawHtml = marked.parse(mdText);
+
+        // Sanitize (prevents script injection in markdown)
+        const safeHtml = DOMPurify.sanitize(rawHtml, {
+          USE_PROFILES: { html: true }
+        });
+
+        contentContainer.innerHTML = safeHtml;
+
+        // Make images/links behave well
+        absolutizeRelativeUrls(contentContainer, filename);
+
+        // Highlight code blocks
+        contentContainer.querySelectorAll("pre code").forEach((block) => {
+          hljs.highlightElement(block);
+        });
+
+        setActive(filename);
+
+        // Scroll to anchor if present
+        if (anchor) {
+          const el = document.getElementById(anchor);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          // Top of doc when switching files
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      } catch (err) {
+        contentContainer.innerHTML =
+          `<p class="text-red-600">Error: ${err.message}</p>`;
+      }
+    }
+
+    // Hash routing (deep-linkable)
+    function handleRoute() {
+      const hash = location.hash.replace(/^#/, "");
+      if (!hash) return;
+      const target = decodeURIComponent(hash);
+      loadMarkdown(target);
+    }
+
+    window.addEventListener("hashchange", handleRoute);
+    handleRoute();
+
+    // Default file if no hash
+    if (!location.hash && files.length) {
+      location.hash = encodeURIComponent(files[0]);
+    }
+
+    // Theme toggle (light/dark)
+    let dark = false;
+    themeBtn.addEventListener("click", () => {
+      dark = !dark;
+
+      document.body.className = dark
+        ? "bg-slate-950 text-slate-100 flex h-screen overflow-hidden"
+        : "bg-slate-50 text-slate-900 flex h-screen overflow-hidden";
+
+      document.querySelector("aside").className = dark
+        ? "w-72 bg-slate-900 border-r border-slate-800 flex flex-col"
+        : "w-72 bg-white border-r border-slate-200 flex flex-col";
+
+      document.querySelector("main").className = dark
+        ? "flex-1 overflow-y-auto bg-slate-950"
+        : "flex-1 overflow-y-auto bg-white";
+
+      contentContainer.className = dark
+        ? "max-w-4xl mx-auto prose prose-invert prose-headings:scroll-mt-24 prose-a:text-indigo-300 lg:prose-lg"
+        : "max-w-4xl mx-auto prose prose-slate prose-headings:scroll-mt-24 prose-a:text-indigo-600 lg:prose-lg";
+    });
+  </script>
 </body>
 </html>
