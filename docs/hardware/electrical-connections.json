@@ -1,0 +1,54 @@
+[
+  {
+    "type": "power",
+    "source": "power_supply_unit",
+    "target": "electric_strike",
+    "voltage": "12V"
+  },
+  {
+    "type": "power",
+    "source": "power_supply_unit",
+    "target": "buck_converter",
+    "voltage": "12V"
+  },
+  {
+    "type": "power",
+    "source": "buck_converter",
+    "target": "door_unit_mcu",
+    "voltage": "5V"
+  },
+  {
+    "type": "power",
+    "source": "buck_converter",
+    "target": "relay_module",
+    "voltage": "5V"
+  },
+  {
+    "type": "data",
+    "source": "door_unit_mcu",
+    "target": "relay_module",
+    "protocol": "GPIO",
+    "sourcePin": "GPIO_OUT",
+    "targetPin": "IN"
+  },
+  {
+    "type": "power",
+    "source": "relay_module",
+    "target": "electric_strike",
+    "voltage": "12V"
+  },
+  {
+    "type": "data",
+    "source": "door_unit_mcu",
+    "target": "door_position_sensor",
+    "protocol": "GPIO",
+    "sourcePin": "GPIO_IN",
+    "targetPin": "Signal"
+  },
+  {
+    "source": "server_power_supply",
+    "target": "server_unit_rpi",
+    "type": "power",
+    "voltage": "5.1V"
+  }
+]

@@ -1,0 +1,920 @@
+{
+  "plan": "- Design a central server application (software) for access control, user management, and logging, interacting with individual door lock units.\n- Develop a door unit with a microcontroller (e.g., ESP32 for WiFi, or an STM32 with an Ethernet module) to communicate with the server and control the electric strike.\n- Integrate an RFID/NFC reader or a Bluetooth Low Energy (BLE) module for proximity sensing of registered devices at each door unit.\n- Use an electric strike (actuator) controlled by a relay module connected to the microcontroller, along with a door position sensor (e.g., magnetic reed switch) for tracking.\n- Design custom 3D-printed enclosures for the door unit's electronics, ensuring secure mounting near the door frame and accommodating the electric strike wiring.\n- Implement power supply units (e.g., 12V DC) for each electric strike and the associated microcontroller, with consideration for backup power.",
+  "nodes": [
+    {
+      "id": "door_unit_mcu",
+      "name": "Door Unit Microcontroller",
+      "pins": [
+        "GPIO",
+        "UART",
+        "SPI",
+        "I2C",
+        "ADC",
+        "WiFi",
+        "BT",
+        "3.3V",
+        "GND",
+        "5V_VIN"
+      ],
+      "type": "mcu",
+      "partId": "62498f44-3918-4358-af26-2bb7b3843b79",
+      "category": "electrical",
+      "imageUrl": "https://imgs.search.brave.com/BbtaPy02rXW8ehIadtdBFldmPTxvpcwdplJShbb2mvM/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/ZWxlY3Jvdy5jb20v/bWVkaWEvY2F0YWxv/Zy9wcm9kdWN0L2Nh/Y2hlL2I2Yjk1Nzc5/MzdlNmE5NmY1MGU1/M2RkYzQyOTgzNjI4/L2Uvcy9lc3AzMi13/cm9vbS0zMmQuanBn",
+      "quantity": 1,
+      "amazonUrl": "https://www.amazon.com/s?k=ESP32-WROOM-32D&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "18x25.5x3.1mm",
+      "description": "Main controller for proximity sensing, server communication (WiFi), and lock actuation. Features integrated WiFi and Bluetooth LE.",
+      "productName": "ESP32-WROOM-32D",
+      "purchaseUrl": "https://www.digikey.com/en/products/detail/espressif-systems/ESP32-WROOM-32D/9490150",
+      "estimatedCost": 4
+    },
+    {
+      "id": "electric_strike",
+      "name": "Electric Strike",
+      "pins": [
+        "Power In 1",
+        "Power In 2"
+      ],
+      "type": "actuator",
+      "partId": "3c2b8010-0088-47c9-bec5-511e4d74096b",
+      "category": "electrical",
+      "imageUrl": "https://imgs.search.brave.com/M57SZh_M3HD0Er9LqbzZyWSefMMy5M3PCo75rqo2CHM/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dG9wbm90Y2hpbmMu/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy93/cGRtLWNhY2hlLzI0/ODZiYjIyMDVjYTQ0/YjBlNzUxOTQyMzg0/YWVjYjIyLmpwZw",
+      "quantity": 1,
+      "amazonUrl": "https://www.amazon.com/s?k=Securitron%20SA-10&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "124x32x30mm",
+      "description": "Electrically controlled lock mechanism for door access. Requires 12V DC to operate.",
+      "productName": "Securitron SA-10",
+      "purchaseUrl": "https://www.amazon.com/s?k=Securitron+SA-10+electric+strike",
+      "estimatedCost": 80
+    },
+    {
+      "id": "relay_module",
+      "name": "Electric Strike Relay Module",
+      "pins": [
+        "VCC",
+        "GND",
+        "IN",
+        "NO",
+        "NC",
+        "COM"
+      ],
+      "type": "actuator",
+      "partId": "eb1d7d0f-5666-4c86-941b-94eede3fff70",
+      "category": "electrical",
+      "imageUrl": "https://imgs.search.brave.com/ZCyE26OPLPAK3BoVOgoMc4_ZsatpBfKwFkNIac0gA6o/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pZWxl/Y3Ryb255LmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvMjAxOC8w/OS81di1yZWxheS5q/cGc",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "pins",
+            "value": "VCC,GND,IN,NO,NC,COM"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=Single%20Channel%205V%20Relay%20Module&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "43x16x18mm",
+      "description": "Switches the high current for the electric strike based on MCU signal.",
+      "productName": "Single Channel 5V Relay Module",
+      "purchaseUrl": "https://www.amazon.com/s?k=single+channel+5V+relay+module",
+      "estimatedCost": 2
+    },
+    {
+      "id": "door_position_sensor",
+      "name": "Door Position Sensor",
+      "pins": [
+        "Signal",
+        "GND"
+      ],
+      "type": "sensor",
+      "partId": "754093e2-c56d-4000-88bd-d9024a4854b4",
+      "category": "electrical",
+      "imageUrl": "https://imgs.search.brave.com/b8ORzm8cTihVuY_tZkunM_HYodruogOHv4_iasdT4Yw/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/cmVlZHN3aXRjaGRl/dmVsb3BtZW50cy5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjMvMDcvMzczMC0y/NDUwLTE5MDEtOTAw/LU5ELUJsb2cucG5n",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "pins",
+            "value": "NC,COM"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=Magnetic%20Reed%20Switch%20NC%2FNO&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "27x14x8mm",
+      "description": "Detects if the door is open or closed, providing feedback to the MCU for tracking.",
+      "productName": "Magnetic Reed Switch NC/NO",
+      "purchaseUrl": "https://www.amazon.com/s?k=magnetic+reed+switch",
+      "estimatedCost": 3
+    },
+    {
+      "id": "power_supply_unit",
+      "name": "Door Unit Power Supply",
+      "pins": [
+        "AC In",
+        "DC Out (12V)"
+      ],
+      "type": "power",
+      "partId": "36b38311-779c-4e7a-9090-7bb6725cbb66",
+      "category": "electrical",
+      "imageUrl": "https://imgs.search.brave.com/htLliZo70oIlCOENKFA_vnoFcHJI4dFN-wA4u4G8Mg0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTFRalBoeWZBbkwu/anBn",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "pins",
+            "value": "Output+,Output-"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=12V%202A%20Wall%20Adapter&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "60x40x30mm",
+      "description": "Provides main power to the entire door unit, including the electric strike and voltage regulation.",
+      "productName": "12V 2A Wall Adapter",
+      "purchaseUrl": "https://www.amazon.com/s?k=12V+2A+power+supply",
+      "estimatedCost": 15
+    },
+    {
+      "id": "buck_converter",
+      "name": "12V to 5V Buck Converter",
+      "pins": [
+        "VIN",
+        "VOUT",
+        "GND"
+      ],
+      "type": "power",
+      "partId": "9df5a46e-e68a-476a-b8ec-df4768161756",
+      "category": "electrical",
+      "imageUrl": "https://imgs.search.brave.com/fW4_GDBeL2rT8mg2Zb_Vxj_7Yepyy9vnmAidOfdgKg0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLmVi/YXlpbWcuY29tL2lt/YWdlcy9nL0ZDY0FB/ZVN3ZHBacFRZWDIv/cy1sNTAwLmpwZw",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "pins",
+            "value": "VIN+,VIN-,VOUT+,VOUT-"
+          },
+          {
+            "label": "efficiency",
+            "value": "Up to 92%"
+          },
+          {
+            "label": "regulator_type",
+            "value": "Step Down (Buck Converter, Non-Isolated)"
+          },
+          {
+            "label": "dropout_voltage",
+            "value": "2VDC minimum (input voltage must be at least 1.5V-2V higher than output)"
+          },
+          {
+            "label": "load_regulation",
+            "value": "+/- 0.5%"
+          },
+          {
+            "label": "module_dimensions",
+            "value": "43.6mm L x 21mm W x 14mm H (typical module size)"
+          },
+          {
+            "label": "voltage_regulation",
+            "value": "+/- 2.5%"
+          },
+          {
+            "label": "input_voltage_range",
+            "value": "DC 4V to 40V (module input can be as low as 3V)"
+          },
+          {
+            "label": "switching_frequency",
+            "value": "150 kHz"
+          },
+          {
+            "label": "output_voltage_range",
+            "value": "Adjustable DC 1.23V to 35V"
+          },
+          {
+            "label": "operating_temperature",
+            "value": "-40 to +85 deg C (for output power less than 10W)"
+          },
+          {
+            "label": "maximum_output_current",
+            "value": "3A (with heatsink recommended for sustained 3A)"
+          }
+        ],
+        "summary": "The LM2596 DC-DC Buck Converter is an adjustable step-down voltage regulator module capable of efficiently converting a higher DC input voltage (4V-40V) to a lower, adjustable DC output voltage (1.23V-35V) with a maximum output current of 3A. It operates at a switching frequency of 150 kHz, offering good line and load regulation. This converter is ideal for projects like the Small Stone CNC to step down the 24V main power supply to 5V for low-power components such as the ESP32, providing a stable and efficient power source.",
+        "examples": [
+          {
+            "url": "https://www.instructables.com/How-to-Use-DC-to-DC-Buck-Converter-LM2596/",
+            "title": "How to Use DC to DC Buck Converter LM2596",
+            "description": "This tutorial shows how to connect and adjust the LM2596 buck converter to power various devices, including tips on battery usage and multiple outputs."
+          },
+          {
+            "url": "https://robocraze.com/blogs/post/how-to-use-dc-to-dc-buck-converter-lm2596",
+            "title": "LM2596 Buck Converter for Arduino Boards, LED Strips, and Small Motors",
+            "description": "This guide demonstrates the LM2596's use in various DIY electronics applications, highlighting its adjustable output for different voltage requirements."
+          },
+          {
+            "url": "https://forums.adafruit.com/viewtopic.php?t=151449",
+            "title": "Powering ESP8266 & Motor Controller with 24V-5V Step-down Converter",
+            "description": "A forum discussion illustrating the application of a 24V to 5V step-down converter, relevant for powering microcontrollers like ESP32 from a higher voltage supply."
+          }
+        ],
+        "sourcing": [
+          {
+            "url": "https://www.addicore.com/products/lm2596-step-down-adjustable-dc-dc-switching-buck-converter",
+            "note": "Adjustable output via multi-turn trimpot",
+            "vendor": "Addicore"
+          },
+          {
+            "url": "https://robu.in/product/lm2596s-dc-dc-buck-converter-power-supply/",
+            "note": "LM2596S DC-DC Buck Converter Power Supply Module",
+            "vendor": "Robu.in"
+          },
+          {
+            "url": "https://www.amazon.com/LM2596-Converter-3-0-40V-1-5-35V-Supply/dp/B08NV3JCBC",
+            "note": "5-pack LM2596 DC to DC Buck Converter, adjustable 3.0-40V to 1.5-35V",
+            "vendor": "Amazon"
+          },
+          {
+            "url": "https://www.aliexpress.com/w/wholesale-lm2596-dc-dc-buck-converter.html",
+            "note": "Wide variety of LM2596 modules available, including with LED voltmeters",
+            "vendor": "AliExpress"
+          },
+          {
+            "url": "https://www.alibaba.com/product-detail/LM2596-DC-DC-Buck-Converter-Regulator_62022521352.html",
+            "note": "Wholesale options for LM2596S-ADJ modules, some with LED voltmeters",
+            "vendor": "Alibaba"
+          }
+        ],
+        "cadFileUrls": [
+          {
+            "url": "https://www.3dcontentcentral.com/download-model.aspx?catalogid=171&id=2815158",
+            "label": "STEP File"
+          },
+          {
+            "url": "https://grabcad.com/library/lm2596-dc-dc-buck-converter-module-1",
+            "label": "GrabCAD 3D Model"
+          },
+          {
+            "url": "https://www.stlfinder.com/3dmodels/lm2596-dc-dc-buck-converter/",
+            "label": "STLFinder 3D Models"
+          }
+        ],
+        "alternatives": [
+          {
+            "name": "Adafruit Mini DC/DC Step-Down (Buck) Converter - 5V @ 1A output - TSR12450",
+            "reason": "A smaller, fixed 5V output alternative, suitable for lower current needs (1A)."
+          },
+          {
+            "name": "eBoot Mini MP1584EN DC-DC Buck Converter",
+            "reason": "Another compact and often cheaper alternative for general step-down applications, typically with lower current ratings."
+          },
+          {
+            "name": "Alternative buck converters for >5A applications",
+            "reason": "The LM2596 is rated for 3A (with heatsink); for applications requiring more than 5A, a different buck converter chip or module designed for higher current would be necessary."
+          }
+        ],
+        "datasheetUrl": "https://www.ti.com/lit/ds/symlink/lm2596.pdf",
+        "documentationUrls": [
+          {
+            "url": "https://www.ti.com/lit/ds/symlink/lm2596.pdf",
+            "title": "LM2596 Datasheet (Texas Instruments)"
+          },
+          {
+            "url": "https://robocraze.com/blogs/post/how-to-use-dc-to-dc-buck-converter-lm2596",
+            "title": "LM2596 Buck Converter – Working, Wiring & Usage Guide"
+          },
+          {
+            "url": "https://componentslibrary.com/lm2596-dc-dc-buck-converter-datasheet.html",
+            "title": "LM2596 DC-DC Buck Converter Datasheet: Specifications, Features, and Application Guide (Components Library)"
+          },
+          {
+            "url": "https://www.scribd.com/document/424165576/20150123144301750-pdf",
+            "title": "LM2596 DC-DC Buck Converter Specs (Scribd)"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=LM2596%20DC-DC%20Buck%20Converter&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "43x21x14mm",
+      "description": "Steps down the 12V supply to 5V for the MCU and RFID/NFC reader.",
+      "productName": "LM2596 DC-DC Buck Converter",
+      "purchaseUrl": "https://www.addicore.com/products/lm2596-step-down-adjustable-dc-dc-switching-buck-converter",
+      "estimatedCost": 1.5
+    },
+    {
+      "id": "door_unit_main_enclosure_back",
+      "name": "Door Unit Main Enclosure Back",
+      "type": "3d_printed",
+      "partId": "c3477986-1fc6-4e90-91ea-de03f95bf940",
+      "category": "mechanical",
+      "material": "PETG",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "print_settings",
+            "value": "0.2mm layer height, 30% infill"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=N%2FA&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "80x80x25mm",
+      "description": "Back half of the door unit enclosure, designed to mount flush against a wall or door frame, with internal standoffs for the PCB mounting plate and cutouts for cable routing.",
+      "productName": "N/A",
+      "purchaseUrl": "N/A",
+      "estimatedCost": 3,
+      "printSettings": "Standard print settings, good layer adhesion."
+    },
+    {
+      "id": "internal_pcb_mounting_plate",
+      "name": "Internal PCB Mounting Plate",
+      "type": "3d_printed",
+      "partId": "c3477986-1fc6-4e90-91ea-de03f95bf940",
+      "category": "mechanical",
+      "material": "PETG",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "print_settings",
+            "value": "0.2mm layer height, 30% infill"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=N%2FA&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "70x70x5mm",
+      "description": "An internal plate with integrated standoffs and mounting points for the microcontroller, buck converter, and relay module, designed to fit within the enclosure halves.",
+      "productName": "N/A",
+      "purchaseUrl": "N/A",
+      "estimatedCost": 1,
+      "printSettings": "Standard print settings, accurate dimensions for PCB mounting."
+    },
+    {
+      "id": "door_sensor_magnet_housing",
+      "name": "Door Sensor Magnet Housing",
+      "type": "3d_printed",
+      "partId": "c3477986-1fc6-4e90-91ea-de03f95bf940",
+      "category": "mechanical",
+      "material": "PETG",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "print_settings",
+            "value": "0.2mm layer height, 30% infill"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=N%2FA&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "30x15x10mm",
+      "description": "Small enclosure for the magnet component of the door position sensor, designed to be mounted on the moving part of the door.",
+      "productName": "N/A",
+      "purchaseUrl": "N/A",
+      "estimatedCost": 0.3,
+      "printSettings": "Standard print settings."
+    },
+    {
+      "id": "door_sensor_main_body_mount",
+      "name": "Door Sensor Main Body Mount",
+      "type": "3d_printed",
+      "partId": "c3477986-1fc6-4e90-91ea-de03f95bf940",
+      "category": "mechanical",
+      "material": "PETG",
+      "quantity": 1,
+      "research": {
+        "specs": [
+          {
+            "label": "print_settings",
+            "value": "0.2mm layer height, 30% infill"
+          }
+        ]
+      },
+      "amazonUrl": "https://www.amazon.com/s?k=N%2FA&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "30x15x10mm",
+      "description": "Mounting bracket/housing for the reed switch component of the door position sensor, designed for secure attachment to the door frame.",
+      "productName": "N/A",
+      "purchaseUrl": "N/A",
+      "estimatedCost": 0.3,
+      "printSettings": "Standard print settings."
+    },
+    {
+      "id": "m3_threaded_heat_set_inserts",
+      "name": "M3 Threaded Heat-Set Inserts",
+      "type": "misc",
+      "partId": "a218c217-5ff2-453c-bf9b-0cb77fe40758",
+      "category": "mechanical",
+      "material": "Brass",
+      "quantity": 6,
+      "amazonUrl": "https://www.amazon.com/s?k=M3%20Brass%20Heat%20Set%20Inserts&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "M3x5mm",
+      "description": "Brass inserts embedded into the 3D-printed enclosure for robust, repeatable assembly with machine screws.",
+      "productName": "M3 Brass Heat Set Inserts",
+      "purchaseUrl": "https://www.amazon.com/s?k=m3+brass+heat+set+inserts",
+      "estimatedCost": 0.2
+    },
+    {
+      "id": "m3_machine_screws",
+      "name": "M3 Machine Screws",
+      "type": "misc",
+      "partId": "a07e1862-d3bb-49b6-b11f-5b09d2d35b7a",
+      "category": "mechanical",
+      "material": "Steel",
+      "quantity": 6,
+      "amazonUrl": "https://www.amazon.com/s?k=M3x10mm%20Pan%20Head%20Machine%20Screws&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "M3x10mm",
+      "description": "Used to assemble the front and back halves of the main enclosure, screwing into the heat-set inserts.",
+      "productName": "M3x10mm Pan Head Machine Screws",
+      "purchaseUrl": "https://www.amazon.com/s?k=m3x10mm+machine+screws",
+      "estimatedCost": 0.1
+    },
+    {
+      "id": "pcb_mounting_screws_m2",
+      "name": "PCB Mounting Screws",
+      "type": "misc",
+      "partId": "b5be54f9-c25f-4e52-a65b-e109b0a87746",
+      "category": "mechanical",
+      "material": "Steel",
+      "quantity": 8,
+      "amazonUrl": "https://www.amazon.com/s?k=M2x6mm%20Self-Tapping%20Screws&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "M2x6mm",
+      "description": "Small screws to secure the microcontroller, buck converter, and relay module to the internal PCB mounting plate.",
+      "productName": "M2x6mm Self-Tapping Screws",
+      "purchaseUrl": "https://www.amazon.com/s?k=m2x6mm+self+tapping+screws",
+      "estimatedCost": 0.05
+    },
+    {
+      "id": "wall_mounting_screws",
+      "name": "Wall Mounting Screws",
+      "type": "misc",
+      "partId": "b07fef61-1f77-4006-bad5-b6a6d5b9efe6",
+      "category": "mechanical",
+      "material": "Steel",
+      "quantity": 2,
+      "amazonUrl": "https://www.amazon.com/s?k=M4x30mm%20Pan%20Head%20Screws&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "M4x30mm",
+      "description": "Screws for securely attaching the entire door unit enclosure to a wall or door frame.",
+      "productName": "M4x30mm Pan Head Screws",
+      "purchaseUrl": "https://www.homedepot.com/s/M4x30mm+screws",
+      "estimatedCost": 0.15
+    },
+    {
+      "id": "cable_gland_m12",
+      "name": "Cable Gland M12",
+      "type": "misc",
+      "partId": "7bfc05b3-1648-4cf0-a158-f3d911070dd4",
+      "category": "mechanical",
+      "material": "Nylon",
+      "quantity": 2,
+      "amazonUrl": "https://www.amazon.com/s?k=M12%20Cable%20Gland%20Connector&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "dimensions": "20x20x25mm",
+      "description": "Provides waterproof and strain-relieved entry points for the power cable and electric strike/door sensor cables into the enclosure.",
+      "productName": "M12 Cable Gland Connector",
+      "purchaseUrl": "https://www.amazon.com/s?k=m12+cable+gland",
+      "estimatedCost": 1.5
+    },
+    {
+      "id": "door_unit_main_enclosure_front_simplified",
+      "name": "Simplified Main Enclosure Front",
+      "productName": "N/A",
+      "type": "3d_printed",
+      "category": "mechanical",
+      "quantity": 1,
+      "estimatedCost": 3,
+      "purchaseUrl": "N/A",
+      "description": "Front half of the door unit enclosure, updated with a solid faceplate for a clean aesthetic. Designed for wall mounting.",
+      "dimensions": "80x80x25mm",
+      "material": "PETG",
+      "printSettings": "Smooth finish, minimal layer lines, high infill for durability.",
+      "amazonUrl": "https://www.amazon.com/s?k=N%2FA&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl"
+    },
+    {
+      "id": "server_unit_rpi",
+      "name": "Main Control Server",
+      "productName": "Raspberry Pi 4 Model B 2GB",
+      "type": "mcu",
+      "category": "electrical",
+      "quantity": 1,
+      "estimatedCost": 45,
+      "purchaseUrl": "https://www.raspberrypi.com/products/raspberry-pi-4-model-b/",
+      "description": "Acts as the central server for managing authorized devices, access schedules, and logging entry events. Communicates securely with the door unit over WiFi.",
+      "dimensions": "85.6x56.5x17mm",
+      "pins": [
+        "5V",
+        "GND",
+        "Ethernet",
+        "USB",
+        "GPIO",
+        "UART_TX",
+        "UART_RX"
+      ],
+      "amazonUrl": "https://www.amazon.com/s?k=Raspberry%20Pi%204%20Model%20B%202GB&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "imageUrl": "https://imgs.search.brave.com/1XlpTNboW3Qq1hpY9PfwAx8nB0oHbDKdbEuV9_LHUN8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9yZWVz/NTIuY29tL2Nkbi9z/aG9wL2ZpbGVzL1JT/MjIzNy00LmpwZz92/PTE3MDIzNzM4MjAm/d2lkdGg9MTk0Ng"
+    },
+    {
+      "id": "server_power_supply",
+      "name": "Server Power Supply",
+      "productName": "Official Raspberry Pi 15.3W USB-C Power Supply",
+      "type": "power",
+      "category": "electrical",
+      "quantity": 1,
+      "estimatedCost": 8,
+      "purchaseUrl": "https://www.raspberrypi.com/products/usb-c-power-supply/",
+      "description": "Provides 5.1V 3A power to the Raspberry Pi server via USB-C.",
+      "dimensions": "45x45x28mm",
+      "pins": [
+        "AC In",
+        "USB-C Out"
+      ],
+      "amazonUrl": "https://www.amazon.com/s?k=Official%20Raspberry%20Pi%2015.3W%20USB-C%20Power%20Supply&linkCode=ll2&tag=blueprintam-20&linkId=4ccf4163514d07f9bf547ac1c23fd3e0&language=en_US&ref_=as_li_ss_tl",
+      "imageUrl": "https://imgs.search.brave.com/7EXylHo2OpcteCLIsOTvOhTs0QNJILpKrpiE-0jlkpo/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9raXRy/b25pay5jby51ay93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyNC8w/Mi81MDIzX2FkZGl0/aW9uYWwtb2ZmaWNp/YWwtcmFzcGJlcnJ5/LXBpLTE1LTMtcG93/ZXItc3VwcGx5LXBz/dS5qcGc"
+    }
+  ],
+  "notes": [
+    "server-controlled locks",
+    "registered devices proximity",
+    "electric strikes",
+    "track door entry",
+    "microcontroller based"
+  ],
+  "projectName": "Smart Door Entry",
+  "originalPrompt": "Open source door entry system based on registered devices proximity. We need a server that controls all the locks and devices and we need electric strikes with a microcontroller to sense the device nearby and talk to the server and check the device permissions if they can enter or not. Then open the door and track",
+  "instructionSteps": [
+    {
+      "id": "fabricate",
+      "subSteps": [
+        {
+          "id": "fabricate_1",
+          "title": "3D Print all mechanical enclosure and sensor housing parts",
+          "partIds": [
+            "door_unit_main_enclosure_front_simplified",
+            "door_unit_main_enclosure_back",
+            "internal_pcb_mounting_plate",
+            "door_sensor_magnet_housing",
+            "door_sensor_main_body_mount"
+          ]
+        },
+        {
+          "id": "fabricate_2",
+          "title": "Install M3 threaded heat-set inserts into the rear enclosure",
+          "partIds": [
+            "door_unit_main_enclosure_back",
+            "m3_threaded_heat_set_inserts"
+          ]
+        },
+        {
+          "id": "fabricate_3",
+          "title": "Prepare cable entry holes in the rear enclosure for cable glands",
+          "partIds": [
+            "door_unit_main_enclosure_back",
+            "cable_gland_m12"
+          ]
+        },
+        {
+          "id": "fabricate_4",
+          "title": "Test fit all 3D printed parts for proper alignment and component seating",
+          "partIds": [
+            "door_unit_main_enclosure_front_simplified",
+            "door_unit_main_enclosure_back",
+            "internal_pcb_mounting_plate",
+            "door_sensor_magnet_housing",
+            "door_sensor_main_body_mount"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wire",
+      "subSteps": [
+        {
+          "id": "wire_1",
+          "title": "Wire 12V power from Door Unit Power Supply to buck converter input and electric strike",
+          "partIds": [
+            "power_supply_unit",
+            "buck_converter",
+            "electric_strike"
+          ]
+        },
+        {
+          "id": "wire_2",
+          "title": "Connect 5V power from buck converter to Door Unit Microcontroller and Electric Strike Relay Module",
+          "partIds": [
+            "buck_converter",
+            "door_unit_mcu",
+            "relay_module"
+          ]
+        },
+        {
+          "id": "wire_3",
+          "title": "Connect Door Unit Microcontroller GPIO to Electric Strike Relay Module control input",
+          "partIds": [
+            "door_unit_mcu",
+            "relay_module"
+          ]
+        },
+        {
+          "id": "wire_4",
+          "title": "Connect Electric Strike Relay Module switched output to Electric Strike",
+          "partIds": [
+            "relay_module",
+            "electric_strike"
+          ]
+        },
+        {
+          "id": "wire_5",
+          "title": "Connect Door Position Sensor to Door Unit Microcontroller GPIO and GND",
+          "partIds": [
+            "door_unit_mcu",
+            "door_position_sensor"
+          ]
+        },
+        {
+          "id": "wire_6",
+          "title": "Connect Server Power Supply to Main Control Server",
+          "partIds": [
+            "server_power_supply",
+            "server_unit_rpi"
+          ]
+        },
+        {
+          "id": "wire_7",
+          "title": "Perform continuity checks on all power and data lines within the door unit",
+          "partIds": [
+            "door_unit_mcu",
+            "relay_module",
+            "buck_converter",
+            "door_position_sensor",
+            "electric_strike"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bringup",
+      "subSteps": [
+        {
+          "id": "bringup_1",
+          "title": "Flash initial firmware to the Door Unit Microcontroller",
+          "partIds": [
+            "door_unit_mcu"
+          ]
+        },
+        {
+          "id": "bringup_2",
+          "title": "Set up operating system and initial software on the Main Control Server",
+          "partIds": [
+            "server_unit_rpi"
+          ]
+        },
+        {
+          "id": "bringup_3",
+          "title": "Verify Door Unit Microcontroller can connect to WiFi and communicate with Main Control Server",
+          "partIds": [
+            "door_unit_mcu",
+            "server_unit_rpi"
+          ]
+        },
+        {
+          "id": "bringup_4",
+          "title": "Test Door Position Sensor input reading with Door Unit Microcontroller firmware",
+          "partIds": [
+            "door_unit_mcu",
+            "door_position_sensor"
+          ]
+        },
+        {
+          "id": "bringup_5",
+          "title": "Test Electric Strike actuation via Relay Module from Door Unit Microcontroller",
+          "partIds": [
+            "door_unit_mcu",
+            "relay_module",
+            "electric_strike"
+          ]
+        },
+        {
+          "id": "bringup_6",
+          "title": "Implement and test secure communication protocols between Door Unit Microcontroller and Main Control Server",
+          "partIds": [
+            "door_unit_mcu",
+            "server_unit_rpi"
+          ]
+        },
+        {
+          "id": "bringup_7",
+          "title": "Verify end-to-end system functionality including server-controlled lock operation and door state tracking",
+          "partIds": [
+            "door_unit_mcu",
+            "server_unit_rpi",
+            "electric_strike",
+            "door_position_sensor"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "assemble",
+      "subSteps": [
+        {
+          "id": "assemble_1",
+          "title": "Mount Door Unit Microcontroller, buck converter, and relay module to Internal PCB Mounting Plate",
+          "partIds": [
+            "door_unit_mcu",
+            "buck_converter",
+            "relay_module",
+            "internal_pcb_mounting_plate",
+            "pcb_mounting_screws_m2"
+          ]
+        },
+        {
+          "id": "assemble_2",
+          "title": "Secure Internal PCB Mounting Plate inside the Door Unit Main Enclosure Back",
+          "partIds": [
+            "internal_pcb_mounting_plate",
+            "door_unit_main_enclosure_back",
+            "pcb_mounting_screws_m2"
+          ]
+        },
+        {
+          "id": "assemble_3",
+          "title": "Route power supply and electric strike cables through cable glands into the rear enclosure",
+          "partIds": [
+            "power_supply_unit",
+            "electric_strike",
+            "cable_gland_m12",
+            "door_unit_main_enclosure_back"
+          ]
+        },
+        {
+          "id": "assemble_4",
+          "title": "Assemble Simplified Main Enclosure Front and Door Unit Main Enclosure Back",
+          "partIds": [
+            "door_unit_main_enclosure_front_simplified",
+            "door_unit_main_enclosure_back",
+            "m3_machine_screws",
+            "m3_threaded_heat_set_inserts"
+          ]
+        },
+        {
+          "id": "assemble_5",
+          "title": "Mount door sensor magnet into its housing",
+          "partIds": [
+            "door_position_sensor",
+            "door_sensor_magnet_housing"
+          ]
+        },
+        {
+          "id": "assemble_6",
+          "title": "Mount door sensor main body into its mount",
+          "partIds": [
+            "door_position_sensor",
+            "door_sensor_main_body_mount"
+          ]
+        },
+        {
+          "id": "assemble_7",
+          "title": "Mount the assembled door unit enclosure to the wall or door frame",
+          "partIds": [
+            "door_unit_main_enclosure_back",
+            "wall_mounting_screws"
+          ]
+        },
+        {
+          "id": "assemble_8",
+          "title": "Mount the door position sensor components to the door and frame, ensuring proper alignment",
+          "partIds": [
+            "door_position_sensor",
+            "door_sensor_magnet_housing",
+            "door_sensor_main_body_mount"
+          ]
+        }
+      ]
+    }
+  ],
+  "projectDescription": "A microcontroller-based Smart Door Entry system controls an electric strike to secure access. It detects door position and unlocks based on server commands and proximity to registered devices, all managed by a dedicated Main Control Server. This system is housed in a custom enclosure with its own power regulation.",
+  "instructionPreamble": {
+    "tools": [
+      "Soldering iron with fine tip",
+      "Wire strippers and cutters",
+      "Precision screwdriver set (Phillips, flathead)",
+      "3D printer (PETG capable)",
+      "Heat gun or soldering iron with tip for heat-set inserts",
+      "Multimeter",
+      "Drill (for wall mounting)",
+      "Network cable (Ethernet)"
+    ],
+    "assumptions": [
+      "Basic electronics assembly and soldering experience",
+      "Familiarity with 3D printer operation and basic post-processing",
+      "Knowledge of ESP32 programming environment (e.g., Arduino IDE, ESP-IDF)",
+      "Experience setting up and configuring Raspberry Pi OS and software",
+      "Access to a development computer for firmware flashing and testing",
+      "Basic network configuration knowledge for secure communication"
+    ]
+  },
+  "electricalConnections": [
+    {
+      "type": "power",
+      "source": "power_supply_unit",
+      "target": "electric_strike",
+      "voltage": "12V"
+    },
+    {
+      "type": "power",
+      "source": "power_supply_unit",
+      "target": "buck_converter",
+      "voltage": "12V"
+    },
+    {
+      "type": "power",
+      "source": "buck_converter",
+      "target": "door_unit_mcu",
+      "voltage": "5V"
+    },
+    {
+      "type": "power",
+      "source": "buck_converter",
+      "target": "relay_module",
+      "voltage": "5V"
+    },
+    {
+      "type": "data",
+      "source": "door_unit_mcu",
+      "target": "relay_module",
+      "protocol": "GPIO",
+      "sourcePin": "GPIO_OUT",
+      "targetPin": "IN"
+    },
+    {
+      "type": "power",
+      "source": "relay_module",
+      "target": "electric_strike",
+      "voltage": "12V"
+    },
+    {
+      "type": "data",
+      "source": "door_unit_mcu",
+      "target": "door_position_sensor",
+      "protocol": "GPIO",
+      "sourcePin": "GPIO_IN",
+      "targetPin": "Signal"
+    },
+    {
+      "source": "server_power_supply",
+      "target": "server_unit_rpi",
+      "type": "power",
+      "voltage": "5.1V"
+    }
+  ],
+  "mechanicalConnections": [
+    {
+      "label": "mounted inside",
+      "source": "internal_pcb_mounting_plate",
+      "target": "door_unit_main_enclosure_back"
+    },
+    {
+      "label": "mounted with pcb_mounting_screws_m2",
+      "source": "door_unit_mcu",
+      "target": "internal_pcb_mounting_plate"
+    },
+    {
+      "label": "mounted with pcb_mounting_screws_m2",
+      "source": "buck_converter",
+      "target": "internal_pcb_mounting_plate"
+    },
+    {
+      "label": "mounted with pcb_mounting_screws_m2",
+      "source": "relay_module",
+      "target": "internal_pcb_mounting_plate"
+    },
+    {
+      "label": "secured to wall by",
+      "source": "door_unit_main_enclosure_back",
+      "target": "wall_mounting_screws"
+    },
+    {
+      "label": "magnet housed in",
+      "source": "door_position_sensor",
+      "target": "door_sensor_magnet_housing"
+    },
+    {
+      "label": "sensor housed in",
+      "source": "door_position_sensor",
+      "target": "door_sensor_main_body_mount"
+    },
+    {
+      "label": "cable routed into",
+      "source": "door_sensor_main_body_mount",
+      "target": "door_unit_main_enclosure_back"
+    },
+    {
+      "label": "fitted into cable entry hole",
+      "source": "cable_gland_m12",
+      "target": "door_unit_main_enclosure_back"
+    },
+    {
+      "label": "cable routed through",
+      "source": "power_supply_unit",
+      "target": "cable_gland_m12"
+    },
+    {
+      "source": "door_unit_main_enclosure_front_simplified",
+      "target": "door_unit_main_enclosure_back",
+      "label": "assembled with m3_machine_screws via m3_threaded_heat_set_inserts"
+    }
+  ],
+  "projectId": "c4b94d2c-fd46-4bd9-9971-40bfbb8e2ee8"
+}

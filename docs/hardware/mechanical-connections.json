@@ -1,0 +1,57 @@
+[
+  {
+    "label": "mounted inside",
+    "source": "internal_pcb_mounting_plate",
+    "target": "door_unit_main_enclosure_back"
+  },
+  {
+    "label": "mounted with pcb_mounting_screws_m2",
+    "source": "door_unit_mcu",
+    "target": "internal_pcb_mounting_plate"
+  },
+  {
+    "label": "mounted with pcb_mounting_screws_m2",
+    "source": "buck_converter",
+    "target": "internal_pcb_mounting_plate"
+  },
+  {
+    "label": "mounted with pcb_mounting_screws_m2",
+    "source": "relay_module",
+    "target": "internal_pcb_mounting_plate"
+  },
+  {
+    "label": "secured to wall by",
+    "source": "door_unit_main_enclosure_back",
+    "target": "wall_mounting_screws"
+  },
+  {
+    "label": "magnet housed in",
+    "source": "door_position_sensor",
+    "target": "door_sensor_magnet_housing"
+  },
+  {
+    "label": "sensor housed in",
+    "source": "door_position_sensor",
+    "target": "door_sensor_main_body_mount"
+  },
+  {
+    "label": "cable routed into",
+    "source": "door_sensor_main_body_mount",
+    "target": "door_unit_main_enclosure_back"
+  },
+  {
+    "label": "fitted into cable entry hole",
+    "source": "cable_gland_m12",
+    "target": "door_unit_main_enclosure_back"
+  },
+  {
+    "label": "cable routed through",
+    "source": "power_supply_unit",
+    "target": "cable_gland_m12"
+  },
+  {
+    "source": "door_unit_main_enclosure_front_simplified",
+    "target": "door_unit_main_enclosure_back",
+    "label": "assembled with m3_machine_screws via m3_threaded_heat_set_inserts"
+  }
+]
