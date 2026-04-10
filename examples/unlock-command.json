@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "commandId": "4f7fd3e1-21c5-4c12-b6f1-87e4f82b9f20",
+  "doorId": "front-door",
+  "controllerId": "controller-front-01",
+  "action": "unlock",
+  "issuedAt": 1712345600,
+  "expiresAt": 1712345630,
+  "nonce": "f02fdfd9f48f4312b3f2a2ef0f8d0b67",
+  "signature": "base64-hmac-placeholder"
+}

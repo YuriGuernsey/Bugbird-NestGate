@@ -1,22 +1,31 @@
 # Security Policy
 
+## Supported Scope
+
+Bugbird NestGate controls physical access. Please treat security issues seriously.
+
 ## Reporting a Vulnerability
 
-If you discover a security issue, do not open a public issue.
+Please do not open a public issue for security vulnerabilities.
 
-Email: security@bugbird.dev
+Instead, contact the maintainers privately with:
+- a short summary
+- affected component
+- reproduction steps
+- impact
+- suggested fix if you have one
 
-Please include:
-- A clear description
-- Steps to reproduce
-- Impact assessment
+## Sensitive Areas
 
----
+High priority issues include:
+- bypassing server authorisation
+- replay attacks
+- forged unlock commands
+- privilege escalation
+- cached permission abuse
+- default credentials
+- unsafe fail open behaviour
 
-## Scope
+## Disclosure Expectations
 
-- ESP32 firmware
-- Raspberry Pi server
-- Protocol design
-
-Physical attacks are considered out of scope but documented.
+We prefer coordinated disclosure. Give maintainers time to reproduce, patch, and communicate safely before publishing details.

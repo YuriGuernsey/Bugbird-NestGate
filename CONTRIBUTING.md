@@ -1,28 +1,54 @@
-# Contributing
+# Contributing to Bugbird NestGate
 
-Bugbird NestGate welcomes contributions.
+Thanks for contributing.
 
----
+## Before You Start
 
-## Guidelines
+Please:
+- read the architecture and security docs
+- avoid pushing insecure shortcuts into auth or unlock flows
+- open an issue before large design changes
 
-- Security changes require discussion
-- No breaking protocol changes without versioning
-- All cryptographic changes must be documented
-- Hardware assumptions must be explicit
+## Development Setup
 
----
+### Server
 
-## Code Style
+```bash
+cd server
+cp .env.example .env
+npm install
+npm run dev
+```
 
-- Clear naming
-- Defensive checks
-- No magic values
-- Log failures loudly
+### ESP32 firmware
 
----
+```bash
+cd node
+cp include/config.example.h include/config.h
+pio run
+```
 
-## Reporting Issues
+## Pull Request Guidelines
 
-Security issues should be reported privately.
-See SECURITY.md.
+- keep PRs focused
+- include tests where possible
+- update docs when behaviour changes
+- describe hardware impact clearly if pins, power, or timing changes
+- never commit secrets or production keys
+
+## Security Sensitive Areas
+
+Please be extra careful when editing:
+- command signing
+- MQTT topics
+- offline unlock logic
+- cached permissions
+- audit logging
+
+## Recommended First Issues
+
+- docs improvements
+- hardware diagrams
+- integration tests
+- admin dashboard polish
+- additional ESP32 drivers

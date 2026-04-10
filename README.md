@@ -6,12 +6,6 @@ NestGate gives you full ownership of your access infrastructure without propriet
 
 This project is designed for real buildings, not demos.
 
-### Door Scanner 3D Model
-
-![3D Model Of Door Scanner](/scanner_model.png "Door Scanner")
-
----
-
 ## What NestGate Is
 
 NestGate is a server authoritative access system.
@@ -19,67 +13,92 @@ NestGate is a server authoritative access system.
 Phones, fobs, and browsers never unlock doors directly.
 
 Instead:
-- Users authenticate with the NestGate server
-- The server evaluates permissions and schedules
-- Door controllers execute only signed, short lived commands
-
-This eliminates replay attacks, spoofing, and device impersonation.
-
----
+- users authenticate with the NestGate server
+- the server evaluates permissions and schedules
+- door controllers execute only signed, short lived commands
 
 ## Core Features
 
-- Centralised access control
-- Clearance levels and door groups
-- Time based schedules
-- Full audit logs
+- centralised access control
+- clearance levels and door groups
+- time based schedules
+- full audit logs
 - NFC fob support
-- Web based unlock via QR
-- Local infrastructure
-- Hardware you own
-- Software you can audit
-
----
-
-## Architecture Overview
-```
-User Phone
-|
-| HTTPS (auth + unlock request)
-v
-Raspberry Pi Server
-|
-| MQTT over TLS (signed commands)
-v
-ESP32 Door Controller
-|
-v
-Electric Strike
-```
-
-The ESP32 never trusts user devices.  
-It only trusts the server.
-
----
+- web based unlock via QR
+- local infrastructure
+- hardware you own
+- software you can audit
 
 ## Repository Structure
-```
+
+```text
 .
-├── server/ Raspberry Pi backend and dashboard
-├── node/ ESP32 firmware
-├── docs/ Architecture, wiring, deployment
+├── docs/
+│   ├── api/
+│   ├── architecture/
+│   ├── deployment/
+│   ├── hardware/
+│   ├── security/
+│   └── testing/
+├── server/
+│   ├── src/
+│   └── scripts/
+├── node/
+│   ├── include/
+│   └── src/
+├── examples/
+├── .github/
 ├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
 ├── SECURITY.md
-└── LICENSE
+└── docker-compose.yml
 ```
 
----
+## Quick Start
+
+### Server
+
+```bash
+cd server
+cp .env.example .env
+npm install
+npm run dev
+```
+
+### ESP32 firmware
+
+```bash
+cd node
+cp include/config.example.h include/config.h
+pio run
+pio run --target upload
+```
+
+## Current Status
+
+This scaffold gives you:
+- the open source project structure
+- a Node.js + TypeScript server skeleton
+- an ESP32 PlatformIO firmware skeleton
+- protocol, security, deployment, and testing docs
+
+You still need to wire in your real hardware pin numbers, production secrets, and final auth flows.
+
+## Open Source Project Standards
+
+This repo includes:
+- contribution guidelines
+- security reporting guidance
+- issue and PR templates
+- a CI workflow
+- architecture and protocol docs
+
+## Hardware
+
+See `docs/hardware/` for the prototype hardware pack, BOM, and build guide.
 
 ## Want Bugbird to Set This Up for You?
 
 NestGate is open source, but secure deployment takes experience.
 
-If you want Bugbird to design, install, configure, and support NestGate for your business, contact us.
-
-Professional setup and ongoing support is a paid service.
-
+If you want Bugbird to design, install, configure, and support NestGate for your business, contact Bugbird.
