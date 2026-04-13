@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   mosquitto:
@@ -6,22 +6,21 @@ services:
     container_name: nestgate-mosquitto
     restart: unless-stopped
     ports:
-      - '1883:1883'
-      - '8883:8883'
+      - "8883:8883"
+      - "1883:1883"
     volumes:
-      - ./server/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
-      - ./server/mosquitto/data:/mosquitto/data
-      - ./server/mosquitto/log:/mosquitto/log
-      - ./server/mosquitto/certs:/mosquitto/certs
+      - ./deploy/mosquitto/config:/mosquitto/config
+      - ./deploy/mosquitto/data:/mosquitto/data
+      - ./deploy/mosquitto/log:/mosquitto/log
 
   server:
     build:
       context: ./server
     container_name: nestgate-server
     restart: unless-stopped
+    depends_on:
+      - mosquitto
     env_file:
       - ./server/.env
     ports:
-      - '3000:3000'
-    depends_on:
-      - mosquitto
+      - "3000:3000"

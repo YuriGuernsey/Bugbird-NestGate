@@ -1,31 +1,46 @@
 # Security Policy
 
-## Supported Scope
+Bugbird NestGate is a security-sensitive access control project.
+Please do not open public issues for vulnerabilities that could put real installs at risk.
 
-Bugbird NestGate controls physical access. Please treat security issues seriously.
+## Supported versions
 
-## Reporting a Vulnerability
+| Version | Supported |
+| --- | --- |
+| main | Yes |
+| older snapshots | No |
 
-Please do not open a public issue for security vulnerabilities.
+## How to report a vulnerability
 
-Instead, contact the maintainers privately with:
-- a short summary
+Send a private report to the project maintainers with:
+- summary of the issue
 - affected component
 - reproduction steps
 - impact
-- suggested fix if you have one
+- suggested fix if available
 
-## Sensitive Areas
+Until a dedicated security mailbox exists, open a GitHub issue asking for a private contact path without posting exploit details.
 
-High priority issues include:
-- bypassing server authorisation
-- replay attacks
-- forged unlock commands
-- privilege escalation
-- cached permission abuse
-- default credentials
-- unsafe fail open behaviour
+## What we aim to do
 
-## Disclosure Expectations
+- acknowledge receipt within 7 days
+- assess severity
+- work on a fix before public disclosure
+- publish a changelog entry when patched
 
-We prefer coordinated disclosure. Give maintainers time to reproduce, patch, and communicate safely before publishing details.
+## Scope
+
+Security reports are especially welcome for:
+- command signing and verification
+- MQTT/TLS configuration
+- provisioning flows
+- credential storage
+- relay and strike control logic
+- offline access behaviour
+- audit log integrity
+
+## Out of scope
+
+- theoretical issues with no realistic exploit path
+- local lab misconfiguration with secrets committed in plain text by the installer
+- denial of service caused by physically cutting power or network cables

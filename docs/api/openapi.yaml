@@ -1,0 +1,63 @@
+openapi: 3.1.0
+info:
+  title: NestGate API
+  version: 0.1.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /api/doors:
+    get:
+      summary: List doors
+      responses:
+        '200':
+          description: Door list
+  /api/doors/{doorId}/unlock:
+    post:
+      summary: Request unlock for a door
+      parameters:
+        - in: path
+          name: doorId
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Unlock command accepted
+        '403':
+          description: Access denied
+  /api/devices:
+    get:
+      summary: List registered devices
+      responses:
+        '200':
+          description: Device list
+  /api/provisioning/register:
+    post:
+      summary: Register a new controller
+      responses:
+        '201':
+          description: Device registered
+components:
+  schemas:
+    Door:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        online:
+          type: boolean
+    UnlockRequest:
+      type: object
+      properties:
+        requestId:
+          type: string
+        userId:
+          type: string
